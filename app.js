@@ -36,7 +36,7 @@ app.get('/graph/:name',function(req,res){
         var links=[];
         var find=[];
         var linksgeo=[];
-	titanConn.inventoryStructure(req.params.name,function(links,linksgeo){var data=JSON.parse("[{"+links.join("},{")+"}]");res.render('graph',{data: data,geo: linksgeo});},found,links,find,linksgeo);
+	titanConn.inventoryStructure(req.params.name,function(links,linksgeo){var data=JSON.parse("[{"+links.join("},{")+"}]");res.render('graph',{data: data,geo: linksgeo,name: req.params.name});},found,links,find,linksgeo);
 });
 app.get('/map',function(req,res){
 	titanConn.incidentMap(function(geo){res.render('map',{geo: geo});});
@@ -44,4 +44,4 @@ app.get('/map',function(req,res){
 app.get('/incident',function(req,res){
 	titanConn.incidentView(function(data){res.render('incident',{data: data});});
 });
-app.listen(8000);
+app.listen(80);
