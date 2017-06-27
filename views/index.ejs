@@ -6,27 +6,21 @@
 <script type="text/javascript" src="/js/search.js"></script>
 </head>
 <body>
-<div style="width:5%;float:left;">
-	<img src="/images/nbn.png" alt="Smiley face" height="20%" width="90%">
-	<a href="/pillar" class="w3-bar-item w3-button">Pillar</a>	
-	<a href="/cable" class="w3-bar-item w3-button">Cable</a>
-	<a href="/chassis" class="w3-bar-item w3-button">Chassis</a>
-	<a href="/card" class="w3-bar-item w3-button">Card</a></div>	
-		<div class="main">
-			<h1><%= page %> STATS</h1>
-			<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names..">
-				<div style="height:80%;overflow:auto;">
-					<table id="myTable" border="1">
-					<tr class="header"><th><%= page %> name</th><th>Incident count</th></tr>
-					<%
-						for(var Key in populate) {
-        						if(populate[Key]>0){ %>
-    								<tr><td><a href="/graph/<%= Key %>"><%= Key %></a></td><td><%= populate[Key] %></td></tr> 
-     					             <% }
-				        	}%>
-					</table>
-				</div>
-		</div>
+<% include nav.ejs %>
+<div class="main">
+	<h1><%= page %> STATS</h1>
+	<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names..">
+	<div style="height:80%;overflow:auto;">
+		<table id="myTable" border="1">
+			<tr class="header"><th><%= page %> name</th><th>Incident count</th></tr>
+			<%
+			for(var Key in populate) {
+       				if(populate[Key]>0){ %>
+    					<tr><td><a href="/graph/<%= Key %>"><%= Key %></a></td><td><%= populate[Key] %></td></tr> 
+     	       		      <% }
+        		}%>
+		</table>
+	</div>
 </div>
 </body>
 </html>

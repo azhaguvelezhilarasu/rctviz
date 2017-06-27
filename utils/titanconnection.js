@@ -1,8 +1,11 @@
 var grex = require('grex');
-var client = grex.createClient({host: 'svapm0000006np',port: 8182,graph: 'graph'});
+var client = grex.createClient({host: '192.168.92.128',port: 8182,graph: 'graph'});
 var gremlin = grex.gremlin;
 var parallellimit=100;
 var parallel=2;
+module.exports.reset=function(){
+	parallel=2;
+};
 module.exports.incidentCount=function (name, callback){
         console.log(name);
         iquery="g.V('type','CopperElement').filter{it.name.matches('.*"+ name  +".*')}.groupBy{it.name}{it.in.has('type','SID').map}{it.size()}.cap";
@@ -22,13 +25,14 @@ module.exports.inventoryStructure=function(name,callback,found,links,find,linksg
         	console.log(name);
 		found.push(name);
 		iquery="g.V('name','"+name+"').in.hasNot('type','SID').transform{[it.name,it.geo]}"
-		//console.log(iquery);
+		console.log(iquery);
         	var query = gremlin(iquery);
         	client.execute(query, function(err, response) {
         		var values = JSON.parse(JSON.stringify(response.results));
 			if(values){
                 		for(var exKey in values) {
 					var link="\"source\": \""+ values[exKey][0] +"\", \"target\": \""+ name +"\", \"type\": \"connected\"";
+					console.log(link);
 					if(links.indexOf(link)<0){
 						links.push(link);
 					}
@@ -46,15 +50,15 @@ module.exports.inventoryStructure=function(name,callback,found,links,find,linksg
 			parallel--;
        		 while(parallel<parallellimit){
                 	if(find.length>0){
-                        	module.exports.inventoryStructure(find.pop(),callback,found,links,find,linksgeo);
                 		parallel+=2;
+                        	module.exports.inventoryStructure(find.pop(),callback,found,links,find,linksgeo);
                 	}
 			else{
 				break;
 			}
         	 }
                                 if(parallel==0){
-                                        callback(found);
+                                        callback(found,links);
                                 }
 
 		});
@@ -69,6 +73,7 @@ module.exports.inventoryStructure=function(name,callback,found,links,find,linksg
                                 if(values){
                                         for(var exKey in values) {
 						var link="\"source\": \""+ name +"\", \"target\": \""+ values[exKey][0] +"\", \"type\": \"connected\"";
+						console.log(link);
 					        if(links.indexOf(link)<0){
                                                 	links.push(link);
                                         	}
@@ -91,14 +96,15 @@ module.exports.inventoryStructure=function(name,callback,found,links,find,linksg
                                 parallel--;
                                 while(parallel<parallellimit){
                                         if(find.length>0){
-                                                module.exports.inventoryStructure(find.pop(),callback,found,links,find,linksgeo);
                                         	parallel+=2;
+                                                module.exports.inventoryStructure(find.pop(),callback,found,links,find,linksgeo);
                                         }
 					else{
 						break;
 					}
                                 }
 				if(parallel==0){
+					console.log(links);
 					callback(found,links);
 				}
                         });
@@ -108,5 +114,5 @@ module.exports.inventoryStructure=function(name,callback,found,links,find,linksg
 //	var links=[];
 //	var find=[];
 //	var linksgeo=[];
-//inventoryStructure('Card-2MAN-01-023-VLC-0001',function(data,links){console.log("final data");console.log(data);console.log("[{"+links.join("},{")+"}]");},found,links,find,linksgeo);
+//module.exports.inventoryStructure('Cable-000000006500976854',function(data,links){console.log("final data");console.log(data);console.log("[{"+links.join("},{")+"}]");},found,links,find,linksgeo);
 //inventoryStructure('Pillar-184401780138867398',function(data){console.log("final data");console.log(data);});

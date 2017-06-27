@@ -31,6 +31,7 @@ app.get('/cable',function(req,res){
 	});
 });
 app.get('/graph/:name',function(req,res){
+	titanConn.reset();
 	        var found=[];
         var links=[];
         var find=[];
