@@ -31,9 +31,14 @@ app.get('/cable',function(req,res){
 	});
 });
 app.get('/graph/:name',function(req,res){
-var data= [{source: "Cable-000000002200683859", target: "Duct-000000002200684306", type: "connected"},{source: "Cable-000000002200683858", target: "Duct-000000002200684284", type: "connected"},{source: "Cable-000000002200683883", target: "Duct-000000002200684284", type: "connected"}];
-	res.render('graph',{data: data});
-	console.log(req.params.name);
+	        var found=[];
+        var links=[];
+        var find=[];
+        var linksgeo=[];
+//inventoryStructure('Card-2MAN-01-023-VLC-0001',function(data,links){console.log("final data");console.log(data);console.log("[{"+links.join("},{")+"}]");},found,links,find,linksgeo);
+	titanConn.inventoryStructure(req.params.name,function(data,links){var data=JSON.parse("[{"+links.join("},{")+"}]");res.render('graph',{data: data});},found,links,find,linksgeo);
+//	data=JSON.parse(data);
+//	res.render('graph',{data: data});
 });
 app.get('/map',function(req,res){
  res.render('map');
