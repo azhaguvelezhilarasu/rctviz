@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+<link rel="stylesheet" type="text/css" href="/styles/page.css">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+</head>
+<style>
+.link {
+  fill: none;
+  stroke: #666;
+  stroke-width: 1.5px;
+}
+
+#licensing {
+  fill: green;
+}
+
+.link.licensing {
+  stroke: green;
+}
+
+.link.resolved {
+  stroke-dasharray: 0,2 1;
+}
+
+circle {
+  fill: #ccc;
+  stroke: #333;
+  stroke-width: 1.5px;
+}
+
+text {
+  font: 10px sans-serif;
+  pointer-events: none;
+  text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+}
+
+</style>
+<body>
+<div style="width:5%;height:80%;float:left;"><img src="/images/nbn.png" alt="Smiley face" height="20%" width="90%"> <a href="pillar.py" class="w3-bar-item w3-button">Pillar</a><a href="cable.py" class="w3-bar-item w3-button">Cable</a><a href="chassis.py" class="w3-bar-item w3-button">Chassis</a><a href="card.py" class="w3-bar-item w3-button">Card</a></div>
+</div>
+<div id="node" style="width:50%;height:500px;background-color:white;float: left;">
+<script src="//d3js.org/d3.v3.min.js"></script>
+<script>
+
+// http://blog.thomsonreuters.com/index.php/mobile-patent-suits-graphic-of-the-day/
+var links = <%- JSON.stringify(data); %>;
+var nodes = {};
+
+// Compute the distinct nodes from the links.
+links.forEach(function(link) {
+  link.source = nodes[link.source] || (nodes[link.source] = {name: link.source});
+  link.target = nodes[link.target] || (nodes[link.target] = {name: link.target});
+});
+
+var width = 960,
+    height = 500;
+
+var force = d3.layout.force()
+    .nodes(d3.values(nodes))
+    .links(links)
+    .size([width, height])
+    .linkDistance(60)
+    .charge(-300)
+    .on("tick", tick)
+    .start();
+
+var svg = d3.select("#node").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+// Per-type markers, as they don't inherit styles.
+svg.append("defs").selectAll("marker")
+    .data(["suit", "licensing", "resolved"])
+  .enter().append("marker")
+    .attr("id", function(d) { return d; })
+    .attr("viewBox", "0 -5 10 10")
+    .attr("refX", 15)
+    .attr("refY", -1.5)
+    .attr("markerWidth", 6)
+    .attr("markerHeight", 6)
+    .attr("orient", "auto")
+  .append("path")
+    .attr("d", "M0,-5L10,0L0,5");
+
+var path = svg.append("g").selectAll("path")
+    .data(force.links())
+  .enter().append("path")
+    .attr("class", function(d) { return "link " + d.type; })
+    .attr("marker-end", function(d) { return "url(#" + d.type + ")"; });
+
+var circle = svg.append("g").selectAll("circle")
+    .data(force.nodes())
+  .enter().append("circle")
+    .attr("r", 6)
+    .call(force.drag);
+
+var text = svg.append("g").selectAll("text")
+    .data(force.nodes())
+  .enter().append("text")
+    .attr("x", 8)
+    .attr("y", ".31em")
+    .text(function(d) { return d.name; });
+
+// Use elliptical arc path segments to doubly-encode directionality.
+function tick() {
+  path.attr("d", linkArc);
+  circle.attr("transform", transform);
+  text.attr("transform", transform);
+}
+
+function linkArc(d) {
+  var dx = d.target.x - d.source.x,
+      dy = d.target.y - d.source.y,
+      dr = Math.sqrt(dx * dx + dy * dy);
+  return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,1 " + d.target.x + "," + d.target.y;
+}
+
+function transform(d) {
+  return "translate(" + d.x + "," + d.y + ")";
+}
+
+</script>
+</div>
+
+<div id="map" style="width:45%;height:500px">
+
+<script>
+function initialize() {
+
+    var locations = [ ['Pit-000000002200684247',-32.9855,151.6701],['Pillar Enclosure-000000002200714533',-32.9844,151.6708],['Pit-000000002200714546',-32.9843,151.6708] ];
+
+    window.map = new google.maps.Map(document.getElementById('map'), {
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    });
+
+    var infowindow = new google.maps.InfoWindow();
+
+    var bounds = new google.maps.LatLngBounds();
+
+    for (i = 0; i < locations.length; i++) {
+        marker = new google.maps.Marker({
+            position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+            map: map
+        });
+
+        bounds.extend(marker.position);
+
+        google.maps.event.addListener(marker, 'click', (function (marker, i) {
+            return function () {
+                infowindow.setContent(locations[i][0]);
+                infowindow.open(map, marker);
+            }
+        })(marker, i));
+    }
+
+    map.fitBounds(bounds);
+
+    var listener = google.maps.event.addListener(map, "idle", function () {
+        map.setZoom(3);
+        google.maps.event.removeListener(listener);
+    });
+}
+
+function loadScript() {
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCmAL3Q81f5xjYt5iJ1uMKVzkgaJCze8Ag&callback=initialize';
+    document.body.appendChild(script);
+}
+
+window.onload = loadScript;
+</script>
+</div>
+
+</body>
