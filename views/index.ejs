@@ -21,7 +21,7 @@
 					<%
 						for(var Key in populate) {
         						if(populate[Key]>0){ %>
-    								<tr><td><a href="graph.py?name=<%= Key %>"><%= Key %></a></td><td><%= populate[Key] %></td></tr> 
+    								<tr><td><a href="/graph/<%= Key %>"><%= Key %></a></td><td><%= populate[Key] %></td></tr> 
      					             <% }
 				        	}%>
 					</table>
