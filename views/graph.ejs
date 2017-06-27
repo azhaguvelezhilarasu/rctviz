@@ -127,7 +127,7 @@ function transform(d) {
 <script>
 function initialize() {
 
-    var locations = [ ['Pit-000000002200684247',-32.9855,151.6701],['Pillar Enclosure-000000002200714533',-32.9844,151.6708],['Pit-000000002200714546',-32.9843,151.6708] ];
+    var locations = <%- JSON.stringify(geo); %>;
 
     window.map = new google.maps.Map(document.getElementById('map'), {
         mapTypeId: google.maps.MapTypeId.ROADMAP
@@ -156,7 +156,7 @@ function initialize() {
     map.fitBounds(bounds);
 
     var listener = google.maps.event.addListener(map, "idle", function () {
-        map.setZoom(3);
+        map.setZoom(6);
         google.maps.event.removeListener(listener);
     });
 }

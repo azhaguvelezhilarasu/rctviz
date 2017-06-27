@@ -36,12 +36,12 @@ app.get('/graph/:name',function(req,res){
         var links=[];
         var find=[];
         var linksgeo=[];
-//inventoryStructure('Card-2MAN-01-023-VLC-0001',function(data,links){console.log("final data");console.log(data);console.log("[{"+links.join("},{")+"}]");},found,links,find,linksgeo);
-	titanConn.inventoryStructure(req.params.name,function(data,links){var data=JSON.parse("[{"+links.join("},{")+"}]");res.render('graph',{data: data});},found,links,find,linksgeo);
-//	data=JSON.parse(data);
-//	res.render('graph',{data: data});
+	titanConn.inventoryStructure(req.params.name,function(links,linksgeo){var data=JSON.parse("[{"+links.join("},{")+"}]");res.render('graph',{data: data,geo: linksgeo});},found,links,find,linksgeo);
 });
 app.get('/map',function(req,res){
- res.render('map');
+	titanConn.incidentMap(function(geo){res.render('map',{geo: geo});});
+});
+app.get('/incident',function(req,res){
+	titanConn.incidentView(function(data){res.render('incident',{data: data});});
 });
 app.listen(8000);
