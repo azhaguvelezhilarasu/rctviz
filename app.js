@@ -6,7 +6,7 @@ app.use('/js', express.static('js'));
 app.use('/images', express.static('images'));
 app.set('view engine', 'ejs');
 app.get('/',function(req,res){
-	        res.render('landingpage');
+	        res.render('landingpage',{page: 'Home'});
 });
 app.get('/card',function(req,res){
 	titanConn.incidentCount('Card-',function(values){

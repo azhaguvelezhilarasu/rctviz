@@ -56,6 +56,7 @@ body{
 .navdiv{
 	width:10%;
 	float:left;
+	text-align: center;
 }
 
 .indextablediv{
@@ -64,7 +65,7 @@ body{
 }
 .mappagediv{
 	width:90%;
-	height:900px;
+	height:700px;
 }
 
 .graphnodediv{

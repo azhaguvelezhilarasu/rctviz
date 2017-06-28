@@ -45,10 +45,15 @@ window.onload = function() {
 		<table id="myTable" border="1">
 			<tr class="header"><th>Incident Id</th>
 			<%
-			for(var Key in data) {
+			var count=0;
+			for(var Key in data) {count++;
        				 %>
     					<tr><td><a href="/graph/<%= data[Key][0] %>"><%= data[Key][0] %></a></td></tr> 
-     	       		<%}%>
+     	       		<%}
+			if(count==0){
+					%><tr><td><center><h2>No records<h2></center></td></tr><%				
+			}
+%>
 		</table>
 	</div>
 	<div class="incinfodiv" id="displaypanel">

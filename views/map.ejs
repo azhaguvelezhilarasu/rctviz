@@ -2,6 +2,7 @@
 <meta charset="utf-8">
 <head>
 <link rel="stylesheet" type="text/css" href="/styles/page.css">
+<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
 <script type="text/javascript" src="/js/search.js"></script>
 </head>
 <style>
@@ -42,13 +43,59 @@ text {
 <div class="mappagediv" id="mapsdiv">
 
 <script>
+function zoomfunctions(){
+        var input = document.createElement('input');
+	input.type='button';
+	input.value='resetzoom';
+	input.onclick=function(){ map.setZoom(5);map.setCenter(new google.maps.LatLng(-26.122997, 133.961992))};
+//        var input = document.getElementById('map-resetzoom');
+        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+//        input = document.getElementById('pac-input');
+	input = document.createElement('input');
+        input.name = 'search';
+	input.placeholder='search a location';
+        var searchBox = new google.maps.places.SearchBox(input);
+        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+        // Bias the SearchBox results towards current map's viewport.
+        map.addListener('bounds_changed', function() {
+          searchBox.setBounds(map.getBounds());
+        });
+        // Listen for the event fired when the user selects a prediction and retrieve
+        // more details for that place.
+        searchBox.addListener('places_changed', function() {
+          var places = searchBox.getPlaces();
+
+          if (places.length == 0) {
+            return;
+          }
+
+          // For each place, get the icon, name and location.
+          var bounds = new google.maps.LatLngBounds();
+          places.forEach(function(place) {
+            if (!place.geometry) {
+              console.log("Returned place contains no geometry");
+              return;
+            }
+              bounds.extend(place.geometry.location);
+          });
+          map.fitBounds(bounds);
+          map.setZoom(13);
+        });
+}
+
 function initialize() {
 
     var locations = <%- JSON.stringify(geo); %>;
 
     window.map = new google.maps.Map(document.getElementById('mapsdiv'), {
+	center: new google.maps.LatLng(-26.122997, 133.961992),
+	zoom: 4,
         mapTypeId: google.maps.MapTypeId.ROADMAP
     });
+
+        var markerCluster = new MarkerClusterer(map, [],
+            {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
 
     var infowindow = new google.maps.InfoWindow();
 
@@ -59,29 +106,30 @@ function initialize() {
             position: new google.maps.LatLng(locations[i][1], locations[i][2]),
             map: map
         });
-
+       markerCluster.addMarker(marker);
         bounds.extend(marker.position);
 
         google.maps.event.addListener(marker, 'click', (function (marker, i) {
             return function () {
-                infowindow.setContent("<a href='/graph/"+ locations[i][0]  +"'>"+locations[i][0]+"</a>");
+                infowindow.setContent("<a href='/graph/"+ locations[i][0]  +"'>"+locations[i][0]+"</a><br><center>"+locations[i][3].join("<br>")+"</center>");
                 infowindow.open(map, marker);
             }
         })(marker, i));
     }
 
-    map.fitBounds(bounds);
+//    map.fitBounds(bounds);
 
     var listener = google.maps.event.addListener(map, "idle", function () {
         map.setZoom(5);
         google.maps.event.removeListener(listener);
     });
+zoomfunctions();        
 }
 
 function loadScript() {
     var script = document.createElement('script');
     script.type = 'text/javascript';
-    script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCmAL3Q81f5xjYt5iJ1uMKVzkgaJCze8Ag&callback=initialize';
+    script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCmAL3Q81f5xjYt5iJ1uMKVzkgaJCze8Ag&callback=initialize&libraries=places';
     document.body.appendChild(script);
 }
 

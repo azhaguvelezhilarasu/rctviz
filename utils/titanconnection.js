@@ -24,19 +24,25 @@ module.exports.incidentCount=function (name, callback){
 
 module.exports.incidentMap=function (callback){
 	var geo=[];
-        iquery="g.V('type','CopperElement').filter{it.in.has('type','SID').asBoolean() && it.has('geo').asBoolean()}.transform{[it.name,it.geo]}";
+        iquery="g.V('type','CopperElement').filter{it.in.has('type','SID').asBoolean() && it.has('geo').asBoolean()}.transform{[it.name,it.geo,it.in.has('type','SID').name]}";
         var query = gremlin(iquery);
         client.execute(query, function(err, response) {
 		console.log(JSON.stringify(response.results));
         	var values = JSON.parse(JSON.stringify(response.results));
                 for(var exKey in values) {
-                       	console.log("key:"+exKey+", value:"+values[exKey][0]);
+ //                    	console.log("key:"+exKey+", value:"+values[exKey][0]);
 			var valueToPush = new Array();
                         valueToPush.push(values[exKey][0]);
                         for(var key in values[exKey][1]) {
-                        	console.log("value:"+values[exKey][1][key]+" :" + key);
+//                        	console.log("value:"+values[exKey][1][key]+" :" + key);
                         	valueToPush.push(parseFloat(values[exKey][1][key]));
                         }
+			var incidentString=[];
+			for(var key in values[exKey][2]) {
+				incidentString.push(values[exKey][2][key]);
+			}
+			console.log(incidentString.join('\n'));
+			valueToPush.push(incidentString);
 			geo.push(valueToPush);
         	}
 		console.log(geo);
