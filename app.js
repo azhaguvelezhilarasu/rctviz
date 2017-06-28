@@ -34,12 +34,12 @@ app.get('/graph/:name',function(req,res){
         var links=[];
         var find=[];
         var linksgeo=[];
-	titanConn.inventoryStructure(req.params.name,function(links,linksgeo){var data=JSON.parse("[{"+links.join("},{")+"}]");res.render('graph',{data: data,geo: linksgeo,name: req.params.name});},found,links,find,linksgeo);
+	titanConn.inventoryStructure(req.params.name,function(links,linksgeo){var data=JSON.parse("[{"+links.join("},{")+"}]");res.render('graph',{page: 'Graph',data: data,geo: linksgeo,name: req.params.name});},found,links,find,linksgeo);
 });
 app.get('/map',function(req,res){
-	titanConn.incidentMap(function(geo){res.render('map',{geo: geo});});
+	titanConn.incidentMap(function(geo){res.render('map',{page: 'Map',geo: geo});});
 });
 app.get('/incident',function(req,res){
-	titanConn.incidentView(function(data){res.render('incident',{data: data});});
+	titanConn.incidentView(function(data){res.render('incident',{page: 'Incident',data: data});});
 });
 app.listen(80);

@@ -2,44 +2,14 @@
 <meta charset="utf-8">
 <head>
 <link rel="stylesheet" type="text/css" href="/styles/page.css">
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" type="text/css" href="/styles/nodestyle.css">
 </head>
-<style>
-.link {
-  fill: none;
-  stroke: #666;
-  stroke-width: 1.5px;
-}
-
-#licensing {
-  fill: green;
-}
-
-.link.licensing {
-  stroke: green;
-}
-
-.link.resolved {
-  stroke-dasharray: 0,2 1;
-}
-
-circle {
-  fill: #ccc;
-  stroke: #333;
-  stroke-width: 1.5px;
-}
-
-text {
-  font: 10px sans-serif;
-  pointer-events: none;
-  text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
-}
-
-</style>
 <body>
+<input class="hideinput" type="text" id="page" value="<%= page %>" >
+<div class="applicationname">NIMO</div>
 <% include nav.ejs %>
 <h1><center><%= name %></center> </h1>
-<div id="node" style="width:50%;height:500px;background-color:white;float: left;">
+<div class="graphnodediv" id="node">
 <script src="//d3js.org/d3.v3.min.js"></script>
 <script>
 
@@ -123,14 +93,14 @@ function transform(d) {
 </script>
 </div>
 
-<div id="map" style="width:45%;height:500px">
+<div class="graphmapdiv" id="mapsdiv">
 
 <script>
 function initialize() {
 
     var locations = <%- JSON.stringify(geo); %>;
 
-    window.map = new google.maps.Map(document.getElementById('map'), {
+    window.map = new google.maps.Map(document.getElementById('mapsdiv'), {
         mapTypeId: google.maps.MapTypeId.ROADMAP
     });
 

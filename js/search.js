@@ -20,6 +20,7 @@ function myFunction() {
 
 function sortTable() {
   var table, rows, switching, i, x, y, shouldSwitch;
+  if(document.getElementById("myTable")!== null){
   table = document.getElementById("myTable");
   switching = true;
   /*Make a loop that will continue until
@@ -51,5 +52,13 @@ function sortTable() {
       switching = true;
     }
   }
+ }
+}
+
+function navchanger(){
+        var page=document.getElementById("page").value.toLowerCase();
+        var navElement = document.getElementById(page);
+        navElement.className="navbarselect";
 }
 document.addEventListener("DOMContentLoaded",sortTable,false);
+document.addEventListener("DOMContentLoaded",navchanger,false);

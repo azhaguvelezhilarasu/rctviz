@@ -2,7 +2,7 @@
 <meta charset="utf-8">
 <head>
 <link rel="stylesheet" type="text/css" href="/styles/page.css">
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<script type="text/javascript" src="/js/search.js"></script>
 </head>
 <style>
 .link {
@@ -37,15 +37,16 @@ text {
 
 </style>
 <body>
+<div class="applicationname">NIMO</div>
 <% include nav.ejs %>
-<div id="map" style="width:94%;height:900px">
+<div class="mappagediv" id="mapsdiv">
 
 <script>
 function initialize() {
 
     var locations = <%- JSON.stringify(geo); %>;
 
-    window.map = new google.maps.Map(document.getElementById('map'), {
+    window.map = new google.maps.Map(document.getElementById('mapsdiv'), {
         mapTypeId: google.maps.MapTypeId.ROADMAP
     });
 
@@ -87,5 +88,5 @@ function loadScript() {
 window.onload = loadScript;
 </script>
 </div>
-
+<input class="hideinput" type="text" id="page" value="<%= page %>" >
 </body>

@@ -1,24 +1,90 @@
+body{
+	font-style: roboto;
+}
+.applicationname{
+        height: 5%;
+        width: 100%;
+        text-align: center;
+        background-color: #143c7d;
+        font-size: 28px;
+        color: #FFFFFF;
+        font-weight: bold;
+        padding-top: 1%;
+}
 .left {
-    width: 10%;
+    width: 20%;
     height: 100%;
     float:left;
     border:solid 1px yellow;
 }
 .main {
-    width: 85%
+    width: 80%
     height: 100%;
     background-color: white;
  }
+.logo{
+	height: 70px;
+	width: 70px;
+}
 .navbar{
 	text-decoration: none;
 	display: block;
 	width: 90%;
 	text-align: left;
 	padding: 2%;
-	margin: 2px 2%;
+	margin: 2px 3%;
 	background-color: #D3D3D3;
 	border-radius: 3px;
 }
+
+.navbarselect{
+        text-decoration: none;
+        display: block;
+        width: 90%;
+        text-align: left;
+        padding: 2%;
+        margin: 2px 3%;
+        background-color: grey;
+	color: #FFFFFF;
+        border-radius: 3px;
+}
+
 .navbar:hover{
 	background-color:grey;
+}
+
+.navdiv{
+	width:10%;
+	float:left;
+}
+
+.indextablediv{
+	height:80%;
+	overflow:auto;
+}
+.mappagediv{
+	width:90%;
+	height:900px;
+}
+
+.graphnodediv{
+	width:50%;
+	height:500px;
+	background-color:white;
+	float: left;
+}
+.graphmapdiv{
+	width:40%;
+	height:500px;
+}
+.incinfodiv{
+	overflow:auto;
+}
+.hideinput{
+        visibility: hidden;
+        height: 0px;
+        width: 0px;
+        padding: 0px;
+        margin: 0px;
+        border: 0px;
 }

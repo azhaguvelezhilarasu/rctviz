@@ -2,15 +2,16 @@
 <head>
 <link rel="stylesheet" type="text/css" href="/styles/tablenew.css">
 <link rel="stylesheet" type="text/css" href="/styles/page.css">
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <script type="text/javascript" src="/js/search.js"></script>
 </head>
 <body>
+<input class="hideinput" type="text" id="page" value="<%= page %>" >
+<div class="applicationname">NIMO</div>
 <% include nav.ejs %>
 <div class="main">
 	<h1><%= page %> STATS</h1>
 	<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names..">
-	<div style="height:80%;overflow:auto;">
+	<div class="indextablediv">
 		<table id="myTable" border="1">
 			<tr class="header"><th><%= page %> name</th><th>Incident count</th></tr>
 			<%

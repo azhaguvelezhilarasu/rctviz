@@ -2,7 +2,6 @@
 <head>
 <link rel="stylesheet" type="text/css" href="/styles/table.css">
 <link rel="stylesheet" type="text/css" href="/styles/page.css">
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <script type="text/javascript" src="/js/search.js"></script>
 <script>
 window.onload = function() {
@@ -36,6 +35,8 @@ window.onload = function() {
 </script>
 </head>
 <body>
+<input class="hideinput" type="text" id="page" value="<%= page %>" >
+<div class="applicationname">NIMO</div>
 <% include nav.ejs %>
 <div class="main">
 	<h1>Incident STATS</h1>
@@ -50,7 +51,7 @@ window.onload = function() {
      	       		<%}%>
 		</table>
 	</div>
-	<div id="displaypanel" style="overflow:auto;">
+	<div class="incinfodiv" id="displaypanel">
 	</div>
 </div>
 </body>
