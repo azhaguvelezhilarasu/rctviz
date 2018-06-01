@@ -1,0 +1,63 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="/styles/table.css">
+<link rel="stylesheet" type="text/css" href="/styles/page.css">
+<script type="text/javascript" src="/js/search.js"></script>
+<script>
+window.onload = function() {
+	var dataset = <%- JSON.stringify(data); %>;
+	var values = JSON.parse(JSON.stringify(dataset));
+
+	var logger = document.getElementById('displaypanel');
+
+	document.body.addEventListener("mouseover",function(e) {
+		e = e || window.event;
+		var targetElem = e.target || e.srcElement;
+
+		switch(targetElem.nodeName) {
+			case 'TD':
+				logger.innerHTML = targetElem.innerHTML;
+//				logger.innerHTML += dataset;
+	                       for(var key in values) {
+					if(targetElem.innerHTML.indexOf(String(values[key][0]))>-1){
+						logger.innerHTML = targetElem.innerHTML + '<br><br>';
+						logger.innerHTML += values[key][1].join('<br>');
+					}
+				}
+
+			break;
+			default:
+	//			logger.innerHTML = "info field";
+		}
+
+	},false);
+}
+</script>
+</head>
+<body>
+<input class="hideinput" type="text" id="page" value="<%= page %>" >
+<div class="applicationname">NIMO</div>
+<% include nav.ejs %>
+<div class="main">
+	<h1>Incident STATS</h1>
+       <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names..">
+	<div>
+		<table id="myTable" border="1">
+			<tr class="header"><th>Incident Id</th>
+			<%
+			var count=0;
+			for(var Key in data) {count++;
+       				 %>
+    					<tr><td><a href="/graph/<%= data[Key][0] %>"><%= data[Key][0] %></a></td></tr> 
+     	       		<%}
+			if(count==0){
+					%><tr><td><center><h2>No records<h2></center></td></tr><%				
+			}
+%>
+		</table>
+	</div>
+	<div class="incinfodiv" id="displaypanel">
+	</div>
+</div>
+</body>
+</html>
